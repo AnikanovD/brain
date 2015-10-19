@@ -72,12 +72,33 @@ class Brain
 
     public function loadSynapses()
     {
-        $this->synapses = unserialize(file_get_contents('net.txt'));
+        $net = file_get_contents('net.txt');
+        //echo 'Loaded net hash:' . md5($net) . PHP_EOL;
+        $this->synapses = unserialize($net);
     }
 
     public function dumpSynapses()
     {
-        file_put_contents('net.txt', serialize($this->synapses));
+        $synapses = serialize($this->synapses);
+        //echo  PHP_EOL . 'Saved net hash:' . md5($synapses);
+        file_put_contents('net.txt', $synapses);
+
+        // monitor for test
+        $monitor = '';
+        foreach ($this->synapses as $key => $value) {
+            $synapse = Brain::getInstance()->getSynapse($key);
+            $monitor .= $key . ' '
+                . $synapse->getSenderNeuron()->getPreId()
+                . ' > '
+                . $synapse->getReceiverNeuron()->getPreId()
+                . ': '
+                . $value['weight']
+                . ' at ('
+                . $value['spikeAt']
+                . ')'
+                . PHP_EOL;
+        }
+        file_put_contents('monitor.txt', $monitor);
     }
 
     public function tick()
@@ -100,9 +121,9 @@ class Brain
         Projection::dumpLayerMap();
     }
 
-    public function getTickCount()
+    static public function getTickCount()
     {
-        return $this->tickCount;
+        return self::getInstance()->tickCount;
     }
 
     public function activateInputNeuron($inputNeuronNum)
@@ -152,7 +173,9 @@ class BrainTeacher
     static public $initFunction;
     static public $unsuccessfulAttempts;
     static public $maxGeneration;
+    static public $maxTickPerGeneration;
     static public $maxAttempts;
+    static public $resetOnLimit;
 
     static public function staggerSynapse($strong)
     {
@@ -172,6 +195,7 @@ class BrainTeacher
         $brain = Brain::getInstance();
 
         foreach ($brain->synapses as $synapse) {
+            // todo: customizable threshold
             if ($brain->getTickCount() - $synapse['spikeAt'] < $tick) {
                 $synapse['weight'] += $inc;
             } else {
@@ -209,7 +233,13 @@ class BrainTeacher
 
     static public function isLimit()
     {
-        return (isset(static::$maxGeneration) && (Brain::getInstance()->generationCount > static::$maxGeneration));
+        return (
+            isset(static::$maxGeneration)
+            && (Brain::getInstance()->generationCount > static::$maxGeneration)
+        ) || (
+            isset(static::$maxTickPerGeneration)
+            && (Brain::getInstance()->getTickCount() / Brain::getInstance()->generationCount > static::$maxTickPerGeneration)
+        );
     }
 
     static public function isExpected()
@@ -242,7 +272,7 @@ class Projection
         if (!static::$mapEnabled) {
             echo "\r   #" . $brain->getTickCount() . ' (' . $brain->generationCount . ')';
         } else {
-            echo str_repeat(PHP_EOL, 10);
+            echo str_repeat(PHP_EOL, 60);
             echo '#' . $brain->getTickCount() . ' - ' . memory_get_usage() . PHP_EOL;
 
             foreach ($brain->neurons as $neuron) {
@@ -262,6 +292,10 @@ class Projection
             }
 
             usleep(10000);
+
+            if ($wasSpike) {
+                //usleep(1000000);
+            }
         }
     }
 
@@ -344,12 +378,14 @@ class LayeredStructure extends Structure
 abstract class Cell
 {
     public $id;
+    public $preId;
     public $prevState;
     public $curState;
 
     public function __construct($preId)
     {
         $this->id = md5($preId . 'cell');
+        $this->preId = $preId;
 
         $this->prevState = $this->createState();
         $this->curState = $this->createState();
@@ -358,6 +394,11 @@ abstract class Cell
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getPreId()
+    {
+        return $this->preId;
     }
 
     public function beforeTick()
@@ -598,13 +639,13 @@ class Synapse
 
 function buildBrain()
 {
-    $layersCount = 4;
-    $layerNeuronsCount = 4;
+    $layersCount = 3;
+    $layerNeuronsCount = 2;
     $additionalSynapses = [
-        ['0,0', '3,0', '5'],
-        ['0,1', '3,1', '5'],
-        ['0,2', '3,2', '5'],
-        ['0,3', '3,3', '5'],
+        //['0,0', '2,0', '5'],
+        //['0,1', '2,1', '5'],
+        //['0,2', '2,2', '5'],
+        //['0,3', '2,3', '5'],
     ];
 
     $structure = new LayeredStructure;
@@ -613,20 +654,25 @@ function buildBrain()
 
 function startBrain($attempt = 1)
 {
-    Projection::$layerNeuronsCount = 4;
+    BrainTeacher::initBrain();
+    Projection::$layerNeuronsCount = 2;
     $brain = Brain::getInstance();
-    $brain->generationCount = 0;
+    $brain->generationCount = 1;
     $brain->tickCount = 1;
 
     // Simulate brain
     for (;;) {
-        if ($attempt > 10) {
+        if ($attempt > BrainTeacher::$maxAttempts) {
             return;
         }
 
         if (BrainTeacher::isLimit()) {
             echo '   attempt ' . $attempt . PHP_EOL;
-            $brain->loadSynapses();
+
+            if (BrainTeacher::$resetOnLimit) {
+                $brain->loadSynapses();
+            }
+
             startBrain($attempt + 1);
             return;
         }
@@ -640,6 +686,10 @@ function startBrain($attempt = 1)
             $successResolve = BrainTeacher::isExpected();
             if ($successResolve) {
                 $fullSuccessResolve = true;
+                if (rand(0,10) == 5) {
+                    BrainTeacher::amplifySynapses(50, 1, 1);
+                    $brain->dumpSynapses();
+                }
             }
 
             while (!$brain->isDead()) {
@@ -650,8 +700,12 @@ function startBrain($attempt = 1)
                 }
             }
 
+            // improve function
+            //$fullSuccessResolve = $fullSuccessResolve && (BrainTeacher::$maxTickPerGeneration > $brain->getTickCount());
+
             if ($fullSuccessResolve) {
                 $brain->dumpSynapses();
+                BrainTeacher::$maxTickPerGeneration = $brain->getTickCount();
                 echo PHP_EOL . '   Ok' . PHP_EOL . PHP_EOL;
                 return;
             }
@@ -659,17 +713,19 @@ function startBrain($attempt = 1)
 
         if ($brain->isDead()) {
             if ($successResolve && !$fullSuccessResolve) {
-                BrainTeacher::$unsuccessfulAttempts += 1;
-                BrainTeacher::amplifySynapses(30, 2, 2);
+                //BrainTeacher::$unsuccessfulAttempts += 1;
+                //BrainTeacher::amplifySynapses(40, 2, 2);
             } else {
-                BrainTeacher::$unsuccessfulAttempts += 2;
-                BrainTeacher::staggerSynapse(20);
+                //BrainTeacher::$unsuccessfulAttempts += 2;
+                BrainTeacher::staggerSynapse(10);
             }
 
+            /*
             if (BrainTeacher::checkAttemptsCount(50)) {
                 BrainTeacher::staggerSynapse(3 * $attempt);
                 BrainTeacher::$unsuccessfulAttempts = 0;
             }
+            */
 
             $brain->generationCount++;
             BrainTeacher::initBrain();
@@ -686,11 +742,10 @@ function buildNet()
 
     BrainTeacher::setInitFunction(function() use ($brain) {
         $brain->activateInputNeuron(1);
-        $brain->activateInputNeuron(2);
     });
 
     BrainTeacher::setTeachFunction(function() use ($brain) {
-        return ($brain->isSpikeOutputNeuron(1) && !$brain->isSpikeOutputNeuron(2) && !$brain->isSpikeOutputNeuron(3) && !$brain->isSpikeOutputNeuron(4));
+        return true;
     });
 
     startBrain();
@@ -736,33 +791,77 @@ function teachCaseThree()
     $brain->loadSynapses();
 
     BrainTeacher::setInitFunction(function() use ($brain) {
+        $brain->activateInputNeuron(1);
         $brain->activateInputNeuron(2);
-        $brain->activateInputNeuron(4);
     });
 
     BrainTeacher::setTeachFunction(function() use ($brain) {
-        return ($brain->isSpikeOutputNeuron(1) && $brain->isSpikeOutputNeuron(2) && $brain->isSpikeOutputNeuron(3) && $brain->isSpikeOutputNeuron(4));
+        return ($brain->isSpikeOutputNeuron(1));
     });
 
     startBrain();
 }
+
+function teachCaseFour()
+{
+    $brain = Brain::getInstance();
+    $brain->loadSynapses();
+
+    BrainTeacher::setInitFunction(function() use ($brain) {
+        //$brain->activateInputNeuron(1);
+        $brain->activateInputNeuron(2);
+    });
+
+    BrainTeacher::setTeachFunction(function() use ($brain) {
+        return (!$brain->isSpikeOutputNeuron(1));
+    });
+
+    startBrain();
+}
+
+function teachCaseFive()
+{
+    $brain = Brain::getInstance();
+    $brain->loadSynapses();
+
+    BrainTeacher::setInitFunction(function() use ($brain) {
+        $brain->activateInputNeuron(1);
+        //$brain->activateInputNeuron(2);
+    });
+
+    BrainTeacher::setTeachFunction(function() use ($brain) {
+        return (!$brain->isSpikeOutputNeuron(1));
+    });
+
+    startBrain();
+}
+
 
 // Start
 set_time_limit(3600);
 
 buildBrain();
 Projection::$mapEnabled = false;
-BrainTeacher::$maxGeneration = 500;
+BrainTeacher::$maxGeneration = 300;
+BrainTeacher::$maxAttempts = 10;
+BrainTeacher::$maxTickPerGeneration = 50;
+BrainTeacher::$resetOnLimit = true;
 
-//buildNet();die();
+if (isset($argv[1]) && ($argv[1] == 'new')) {
+    buildNet();
+    die();
+}
 
 for (;;) {
-    echo 'One' . PHP_EOL;
-    teachCaseOne();
-    echo 'Two' . PHP_EOL;
-    teachCaseTwo();
-    echo 'Three' . PHP_EOL;
+    //echo 'One' . PHP_EOL;
+    //teachCaseOne();
+    //echo 'Two' . PHP_EOL;
+    //teachCaseTwo();
+    //usleep(500000);
+    echo 'Other' . PHP_EOL;
     teachCaseThree();
+    teachCaseFour();
+    teachCaseFive();
 
     echo PHP_EOL;
 }
