@@ -1,0 +1,21 @@
+pet|animal|10
+    animal|cat|10
+        cat|loyal|5
+        cat|tiger|8
+    animal|dog|10
+        dog|loyal|8
+    animal|bear|9
+        bear|wild|10
+    animal|tiger|9
+        tiger|wild|10
+    animal|elephant|7
+        elephant|wild|7
+        elephant|circus|8
+        elephant|trunk|10
+            trunk|nose|10
+            trunk|hose|9
+pet|home|9
+pet|loyal|8
+wild|dangerous|9
+dangerous|fire|7
+fire|circus|4

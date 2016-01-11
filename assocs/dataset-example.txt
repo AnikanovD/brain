@@ -1,0 +1,9 @@
+Dataset contains list of definitions.
+Definition include two meanings and theirs relevance.
+Each definition on new line.
+
+<meaning>|<meaning>|<relevance>\n
+cat|pet|10
+cat|animal|10
+animal|fear|8
+cat|fear|3
