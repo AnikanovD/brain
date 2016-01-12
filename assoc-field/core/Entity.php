@@ -1,5 +1,7 @@
 <?php
 
+namespace AssocField;
+
 /**
  * Entity
  * It smallest unit in the theory associative field, which is related to other entities.

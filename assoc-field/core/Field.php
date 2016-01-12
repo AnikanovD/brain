@@ -1,5 +1,7 @@
 <?php
 
+namespace AssocField;
+
 /**
  * Associative field
  * Storage of entities.

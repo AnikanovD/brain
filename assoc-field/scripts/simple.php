@@ -1,10 +1,7 @@
 <?php
 
-// Bootstrap
-require_once 'Bootstrap.php';
-
 // Loading dataset
-$dataset->loadFromFile('dataset-pet.txt');
+$dataset->loadPlain($this);
 
 // Creating entities
 foreach ($dataset->meaningsList as $meaning => $number) {
@@ -25,4 +22,4 @@ foreach ($dataset->definitionsList as $definition) {
 //
 // Lets try build a chain of entities
 
-print_r($consciousness->showProjection());
+$consciousness->makeAllChains();

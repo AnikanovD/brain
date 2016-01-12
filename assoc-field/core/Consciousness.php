@@ -1,10 +1,12 @@
 <?php
 
+namespace AssocField;
+
 /**
  * Consciousness
  * It is the beginning of a structured chaos that we call mind.
  *
- * Implement focus with relevance
+ * @todo Implement focus with relevance
  */
 class Consciousness
 {
@@ -15,26 +17,27 @@ class Consciousness
         $this->field = $field;
     }
 
-    public function showProjection()
+    public function makeAllChains()
     {
         foreach ($this->field->entities as $entity) {
-            $this->expandChain($entity);
+            $this->makeChain($entity);
         }
     }
 
-    public function expandChain($entity, $level = 0, $relevance = 0)
+    public function makeChain($entity, $level = 0, $relevance = 0)
     {
-        Utils::log(
+        AssocField::log(
             str_repeat(' ', $level * 4) . $entity->meaning . '(' . $relevance . ')'
         );
 
         // Preventing circular links
-        if ($level > 10) return;
+        if ($level > 3) return;
 
         // Traverse
         foreach ($entity->links as $entityId => $relevance) {
             $entityRelated = $this->field->findEntityById($entityId);
-            $this->expandChain($entityRelated, $level + 1, $relevance);
+
+            $this->makeChain($entityRelated, $level + 1, $relevance);
         }
     }
 

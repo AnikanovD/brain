@@ -1,15 +1,25 @@
 <?php
 
+namespace AssocField;
+
 /**
  * Dataset
+ * Parses the input data.
+ * Generates a list of meanings. Builds a connection.
  */
 class Dataset
 {
     public $meaningsList = [];
     public $definitionsList = [];
 
-    public function loadFromFile($filename)
+    public function loadPlain($source)
     {
+        if (is_object($source)) {
+            $source = $source->scriptName;
+        }
+
+        $filename = AF_PATH . '/dataset/' . $source . '.txt';
+
         $rows = explode("\n", file_get_contents($filename));
 
         foreach ($rows as $line => $row) {

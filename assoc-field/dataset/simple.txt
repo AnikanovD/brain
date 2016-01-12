@@ -1,0 +1,3 @@
+one|two|10
+two|three|10
+three|six|10
