@@ -1,7 +1,4 @@
 <?php
-/**
- * Example
- */
 
 // Loading dataset simple.txt
 $dataset->loadPlain($this);
@@ -25,4 +22,7 @@ foreach ($dataset->definitionsList as $definition) {
 //
 // Lets try build a chain of entities
 
-$consciousness->makeAllChains();
+$tea = $field->image('чай')->flash();
+$mug = $field->image('кружка')->flash();
+
+AssocField\Utils::dumpChains($tea->chains, $mug->chains);

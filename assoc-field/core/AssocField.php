@@ -10,13 +10,21 @@ class AssocField
     public $scriptName;
     public $scriptPath;
 
+    public static $i;
+    public static $field;
+    public static $dataset;
+
     /**
      * Perform prepares
      */
     public function __construct()
     {
-        // Arguments
-        global $argv, $argc;
+        if (isset(self::$i)) {
+            throw new \Exception('AssocField already instanced');
+        }
+
+        mb_internal_encoding('UTF-8');
+        $argv = $_SERVER['argv'];
 
         // Welcome!
         self::showWelcome();
@@ -40,6 +48,19 @@ class AssocField
         if (!file_exists($this->scriptPath)) {
             self::log('Script not found (' . $this->scriptPath . ')');
         }
+
+        // Last prepares
+        $this->initDomains();
+        self::$i = $this;
+    }
+
+    /**
+     * Defines static property
+     */
+    public function initDomains()
+    {
+        self::$field = new Field;
+        self::$dataset = new Dataset;
     }
 
     /**
@@ -48,9 +69,8 @@ class AssocField
     public function runScript()
     {
         // Preparing the environment
-        $field = new Field;
-        $dataset = new Dataset;
-        $consciousness = new Consciousness($field);
+        $field = self::$field;
+        $dataset = self::$dataset;
 
         // Run
         self::bar();
@@ -74,8 +94,6 @@ class AssocField
         self::log('| | | Implementation of the Theory of Associative Fields                                  |');
         self::log('| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |');
         self::nl();
-
-        self::bar(2000);
     }
 
     /**
@@ -95,7 +113,7 @@ class AssocField
     }
 
     /**
-     * Print new line
+     * Print a new line
      */
     public static function nl($str = '')
     {
@@ -103,16 +121,20 @@ class AssocField
     }
 
     /**
-     * Print string
+     * Print a dashed line
      */
-    public static function bar($duration = 200)
+    public static function bar($duration = 0)
     {
         $divider = 46;
         echo '  ';
 
-        for ($i = 0; $i < $divider; $i++) {
-            echo '- ';
-            usleep(($duration * 1000) / $divider);
+        if ($duration > 0) {
+            for ($i = 0; $i < $divider; $i++) {
+                echo '- ';
+                usleep(($duration * 1000) / $divider);
+            }
+        } else {
+            echo str_repeat('- ', 46);
         }
 
         self::nl();

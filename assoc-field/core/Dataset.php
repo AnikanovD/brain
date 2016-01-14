@@ -14,6 +14,7 @@ class Dataset
 
     public function loadPlain($source)
     {
+        // Passed $this
         if (is_object($source)) {
             $source = $source->scriptName;
         }
@@ -23,12 +24,20 @@ class Dataset
         $rows = explode("\n", file_get_contents($filename));
 
         foreach ($rows as $line => $row) {
+
+            // Comment
+            if (substr($row, 0, 1) == '#' || empty(trim($row))) {
+                continue;
+            }
+
+            // Parse definition
             list($one, $two, $relevance) = explode("|", trim($row));
 
             if (empty($one) || empty($two) || empty($relevance) || !is_numeric($relevance)) {
                 throw new Exception('Invalid definition at ' . $line . ' line.' . "\n" . $row);
             }
 
+            // Store meanings and definition
             $one = Utils::normalizeMeaning($one);
             $this->addMeaning($one);
 

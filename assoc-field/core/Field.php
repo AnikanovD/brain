@@ -57,6 +57,16 @@ class Field
     }
 
     /**
+     * Create image instance
+     */
+    public function image($meaning)
+    {
+        $entity = $this->findEntityByMeaning($meaning);
+
+        return new Image($entity);
+    }
+
+    /**
      * Generate ID
      *
      * @return string

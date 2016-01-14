@@ -30,11 +30,37 @@ class Utils
     }
 
     /**
-     * Dump links into graphical
+     * Dump
      */
-    public static function dumpLinks($var)
+    public static function dumpChains()
     {
-        echo PHP_EOL;
+        $chains = func_get_args();
+
+        foreach ($chains as $index => $chain) {
+            $chains[$index] = self::translateChain($chains[$index]);
+        }
+
+        $data = json_encode($chains);
+        $dumpName = AssocField::$i->scriptName . '_chains.json';
+
+        file_put_contents($dumpName, $data);
+        AssocField::log('Dumped');
+    }
+
+    public static function translateChain($arr)
+    {
+        $_arr = [];
+
+        foreach ($arr as $k => $v) {
+            $entity = AssocField::$field->findEntityById($k);
+            if (is_array($v)) {
+                $_arr[$entity->meaning] = self::translateChain($v);
+            } else {
+                $_arr[$entity->meaning] = $v;
+            }
+        }
+
+        return $_arr;
     }
 
 }
