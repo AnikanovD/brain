@@ -1,0 +1,64 @@
+Base definitions
+================
+
+**entity**
+**motive** - some entity that generates emotion
+**emotion** - it is a state that is an assessment
+**timing** - it is an entity that depends on the time
+
+Fields
+======
+
+**R** - Receptive field
+**A** - Associative field
+**E** - Emotion field
+**T** - Timing
+
+Operators
+=========
+
+field definition
+<field> (<entities>)
+
+base classificator
+(<entities>) : <entity>
+
+strict classificator
+(<entities>) : (<entity>)
+
+fuzzy classificator
+(<entities>) -> <entity>
+
+Example
+=======
+
+```
+// Fields
+
+R (one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, plus, minus, equal, unknown)
+A (digit, operator, expression)
+E (unsolved > solved)
+T (position)
+
+// Relations many-to-one
+(one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve) : (digit)
+(plus, minus, equal) : (operator)
+(digit, operator, equal) : (expression)
+
+// Relations
+T+expression : (digit > operator > digit)
+T+solved : (expression > +expression) > (solved)
+E+ : (* > equal)
+
+
+// motivation
+(digit > operator > digit > equal) > (solve)
+(digit > operator > digit > equal > digit) > (solved, unsolved)
+
+// training
+(one > plus > two > equal > three) = (solved)
+(one > plus > four > equal > five) = (solved)
+(two > plus > three > equal > five) = (solved)
+(two > plus > five > equal > seven) = (solved)
+(six > plus > one > equal > )
+```

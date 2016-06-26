@@ -1,0 +1,882 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Example of the small assoc field</title>
+    </head>
+    <body>
+        <style>
+            body {
+            margin-bottom: 23px;
+            white-space: normal !important;
+            }
+            ul {
+            list-style-type: none;
+            padding: 0px;
+            margin: 0px 0px 0px 26px;
+            }
+            li {
+            position: relative;
+            }
+            .hoverable {
+            transition: background-color .2s ease-out 0s;
+            -webkit-transition: background-color .2s ease-out 0s;
+            display: inline-block;
+            }
+            .hovered {
+            transition-delay: .2s;
+            -webkit-transition-delay: .2s;
+            }
+            .selected {
+            outline-style: solid;
+            outline-width: 1px;
+            outline-style: dotted;
+            }
+            .collapsed>.collapsible {
+            display: none;
+            }
+            .ellipsis {
+            display: none;
+            }
+            .collapsed>.ellipsis {
+            display: inherit;
+            }
+            .collapser {
+            position: absolute;
+            top: 1px;
+            left: -1.5em;
+            cursor: default;
+            user-select: none;
+            -webkit-user-select: none;
+            }
+            body {
+            white-space: pre;
+            font-family: monospace;
+            }
+            .property {
+            font-weight: bold;
+            }
+            .type-null {
+            color: gray;
+            }
+            .type-boolean {
+            color: firebrick;
+            }
+            .type-number {
+            color: blue;
+            }
+            .type-string {
+            color: green;
+            }
+            .callback-function {
+            color: gray;
+            }
+            .collapser:after {
+            content: "-";
+            }
+            .collapsed > .collapser:after {
+            content: "+";
+            }
+            .ellipsis:after {
+            content: " … ";
+            }
+            .collapsible {
+            margin-left: 2em;
+            }
+            .hoverable {
+            padding-top: 1px;
+            padding-bottom: 1px;
+            padding-left: 2px;
+            padding-right: 2px;
+            border-radius: 2px;
+            }
+            .hovered {
+            background-color: rgba(235, 238, 249, 1);
+            }
+            .collapser {
+            padding-right: 6px;
+            padding-left: 6px;
+            }
+        </style>
+        <div id="json">
+            <div class="collapser"></div>
+            [<span class="ellipsis"></span>
+            <ul class="array collapsible">
+                <li>
+                    <div class="hoverable selected">
+                        <div class="collapser"></div>
+                        {<span class="ellipsis"></span>
+                        <ul class="obj collapsible">
+                            <li>
+                                <div class="hoverable">
+                                    <span class="property">чай</span>:
+                                    <div class="collapser"></div>
+                                    {<span class="ellipsis"></span>
+                                    <ul class="obj collapsible">
+                                        <li>
+                                            <div class="hoverable">
+                                                <span class="property">пить</span>:
+                                                <div class="collapser"></div>
+                                                {<span class="ellipsis"></span>
+                                                <ul class="obj collapsible">
+                                                    <li>
+                                                        <div class="hoverable"><span class="property">чай</span>: <span class="type-string">"@"</span>,</div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">вода</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">кран</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">чайник</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">дождь</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">фонтан</span>: <span class="type-string">"*"</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                },
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="hoverable">
+                                                <span class="property">напиток</span>:
+                                                <div class="collapser"></div>
+                                                {<span class="ellipsis"></span>
+                                                <ul class="obj collapsible">
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">вода</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">кран</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">чайник</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">дождь</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">фонтан</span>: <span class="type-string">"*"</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                },
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="hoverable"><span class="property">растение</span>: <span class="type-string">"*"</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    }
+                                </div>
+                            </li>
+                        </ul>
+                        },
+                    </div>
+                </li>
+                <li>
+                    <div class="hoverable">
+                        <div class="collapser"></div>
+                        {<span class="ellipsis"></span>
+                        <ul class="obj collapsible">
+                            <li>
+                                <div class="hoverable">
+                                    <span class="property">кружка</span>:
+                                    <div class="collapser"></div>
+                                    {<span class="ellipsis"></span>
+                                    <ul class="obj collapsible">
+                                        <li>
+                                            <div class="hoverable">
+                                                <span class="property">керамика</span>:
+                                                <div class="collapser"></div>
+                                                {<span class="ellipsis"></span>
+                                                <ul class="obj collapsible">
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">посуда</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">тарелка</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">еда</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">кастрюля</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">суп</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">сковорода</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">жарить</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">вилка</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">еда</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">салат</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">ложка</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">металл</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">размешивать</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">суп</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">сахар</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        }
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                },
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="hoverable">
+                                                <span class="property">чай</span>:
+                                                <div class="collapser"></div>
+                                                {<span class="ellipsis"></span>
+                                                <ul class="obj collapsible">
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">пить</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">чай</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">пить</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">напиток</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">растение</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">вода</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">кран</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">чайник</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">дождь</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">фонтан</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        }
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">напиток</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">вода</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">кран</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">чайник</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">дождь</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">фонтан</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        }
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable"><span class="property">растение</span>: <span class="type-string">"*"</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                },
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="hoverable">
+                                                <span class="property">кофе</span>:
+                                                <div class="collapser"></div>
+                                                {<span class="ellipsis"></span>
+                                                <ul class="obj collapsible">
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">пить</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">чай</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">пить</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">напиток</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">растение</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">вода</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">кран</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">чайник</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">дождь</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">фонтан</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        }
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">напиток</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">вода</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">кран</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">чайник</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">дождь</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">фонтан</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        }
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable"><span class="property">зерна</span>: <span class="type-string">"*"</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                },
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="hoverable">
+                                                <span class="property">ложка</span>:
+                                                <div class="collapser"></div>
+                                                {<span class="ellipsis"></span>
+                                                <ul class="obj collapsible">
+                                                    <li>
+                                                        <div class="hoverable"><span class="property">металл</span>: <span class="type-string">"*"</span>,</div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">размешивать</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">напиток</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">вода</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">чай</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">пить</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">напиток</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">растение</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">кофе</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">пить</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">напиток</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">зерна</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        }
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable"><span class="property">суп</span>: <span class="type-string">"*"</span>,</div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">сахар</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">напиток</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">вода</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">чай</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">пить</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">напиток</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">растение</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">кофе</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">пить</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">напиток</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">зерна</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        }
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                },
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="hoverable">
+                                                <span class="property">посуда</span>:
+                                                <div class="collapser"></div>
+                                                {<span class="ellipsis"></span>
+                                                <ul class="obj collapsible">
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">тарелка</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">еда</span>: <span class="type-string">"*"</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">кастрюля</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">суп</span>: <span class="type-string">"*"</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">сковорода</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">жарить</span>: <span class="type-string">"*"</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">вилка</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">еда</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">салат</span>: <span class="type-string">"*"</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">ложка</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">металл</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">размешивать</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">напиток</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">чай</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">кофе</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">суп</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">сахар</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">напиток</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">чай</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">кофе</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        }
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                },
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="hoverable">
+                                                <span class="property">ручка</span>:
+                                                <div class="collapser"></div>
+                                                {<span class="ellipsis"></span>
+                                                <ul class="obj collapsible">
+                                                    <li>
+                                                        <div class="hoverable"><span class="property">рука</span>: <span class="type-string">"*"</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                },
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="hoverable">
+                                                <span class="property">пить</span>:
+                                                <div class="collapser"></div>
+                                                {<span class="ellipsis"></span>
+                                                <ul class="obj collapsible">
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">чай</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">пить</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">чай</span>: <span class="type-string">"!"</span>,</div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">вода</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable">
+                                                                        <span class="property">напиток</span>:
+                                                                        <div class="collapser"></div>
+                                                                        {<span class="ellipsis"></span>
+                                                                        <ul class="obj collapsible">
+                                                                            <li>
+                                                                                <div class="hoverable"><span class="property">вода</span>: <span class="type-string">"!"</span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        },
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">растение</span>: <span class="type-string">"*"</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            },
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="hoverable">
+                                                            <span class="property">вода</span>:
+                                                            <div class="collapser"></div>
+                                                            {<span class="ellipsis"></span>
+                                                            <ul class="obj collapsible">
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">кран</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">чайник</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">дождь</span>: <span class="type-string">"*"</span>,</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="hoverable"><span class="property">фонтан</span>: <span class="type-string">"*"</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            }
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                }
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    }
+                                </div>
+                            </li>
+                        </ul>
+                        }
+                    </div>
+                </li>
+            </ul>
+            ]
+        </div>
+    </body>
+</html>
