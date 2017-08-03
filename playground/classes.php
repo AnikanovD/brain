@@ -217,7 +217,7 @@ class LinkCluster extends Link
     {
         // обрабатываем очередь импульсов
         foreach ($this->impulses as $key => $impulse) {
-            if ($impulse->time == 0)
+            if ($impulse->time == 0) {
                 $this->potential += $impulse->potential;
             }
 
