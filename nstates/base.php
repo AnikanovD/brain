@@ -152,49 +152,68 @@ trait NeuronStateChain
     {
         return implode(' => ', $this->stateChain);
     }
-}
 
-class NeuronFuncState extends Neuron
-{
-    use NeuronStateChain;
-}
-
-class TickableNeuron extends Neuron
-{
-
-}
-
-class Mesh
-{
-    public $links;
-
-    public function run()
+    public function defStatesChain()
     {
+        $statesChains = [
+            'associated' => [Neuron::STATE_BLISS, Neuron::STATE_WARMED],
+            'detected'   => [Neuron::STATE_BLISS, Neuron::STATE_INFLAMED, Neuron::STATE_BURNED],
+            'predicted'  => [Neuron::STATE_BLISS, Neuron::STATE_WARMED, Neuron::STATE_INFLAMED, Neuron::STATE_BURNED],
+        ];
 
-    }
-
-    public function to($fromNeuron, $toNeuron)
-    {
-
+        return $statesChain;
     }
 }
 
+trait NeuronInputs
+{
+    public $inputs = [];
 
-$stateChains = [
-    'associated' => [Neuron::STATE_BLISS, Neuron::STATE_WARMED],
-    'detected'   => [Neuron::STATE_BLISS, Neuron::STATE_INFLAMED, Neuron::STATE_BURNED],
-    'predicted'  => [Neuron::STATE_BLISS, Neuron::STATE_WARMED, Neuron::STATE_INFLAMED, Neuron::STATE_BURNED],
-];
+    public function in($potential)
+    {
+        $this->inputs[] = $potential;
+    }
+
+    public function integrate()
+    {
+        $potential = array_sum($this->inputs);
+        $this->inputs = [];
+        $this->fire($potential);
+    }
+}
+
+trait NeuronOutput
+{
+    public function out()
+    {
+        if ($this->prevState == Neuron::STATE_INFLAMED) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+class SimpleNeuron extends Neuron
+{
+    use NeuronInputs;
+    use NeuronOutput;
+    //use NeuronStateChain;
+}
+
+
+
+
 
 $fires = [0,0,34,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-$neuron = new NeuronFuncState;
+$neuron = new SimpleNeuron;
 
 foreach ($fires as $i => $potential) {
     echo str_pad($i, 4, ' ', STR_PAD_BOTH) . ' | ';
     echo str_pad($neuron->curState, 12, ' ', STR_PAD_LEFT) . ' | ';
     echo str_pad($neuron->potential, 7, ' ', STR_PAD_BOTH) . ' | ';
 
-    $neuron->fire($potential);
+    $neuron->integrate();
 
     echo str_pad($neuron->potential, 7, ' ', STR_PAD_BOTH) . ' | ';
 
@@ -203,7 +222,10 @@ foreach ($fires as $i => $potential) {
     echo str_pad($neuron->potential, 7, ' ', STR_PAD_BOTH) . ' | ';
     echo str_pad($neuron->curState, 12, ' ', STR_PAD_RIGHT) . ' | ';
 
-    echo $neuron->getStateChain();
+    echo $neuron->out();
+
+    $neuron->in($potential);
+    //echo $neuron->getStateChain();
 
     echo PHP_EOL;
 }
