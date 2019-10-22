@@ -3,68 +3,52 @@
 require_once './Core.php';
 
 /**
- * Build configuration
- */
-
-$width = 100; // CC in xy
-$height = 100; // CC in xy
-
-$neuronCount = 4; // N in CC
-$columnCount = $width * $height // CC;
-
-$columnSize = 15; // xy in CC
-
-$cw = $width * $columnSize; // xy
-$ch = $height * $columnSize; // xy
-
-
-/**
  * Build cortex
  */
 
 Env::stage('Build cortex');
 
+// todo
+
+$width = 100;
+$height = 100;
+
+$hopMaxCount = 3000;
+
+$neuronCount = 4;
+$columnSize = 15;
+$columnCount = $width * $height;
+
+$cw = $width * $columnSize;
+$ch = $height * $columnSize;
+
 $cortex = new Cortex([$cw, $ch]);
 
-// todo: move to class Cortex
+Env::info("neurons: " . ($columnCount * $neuronCount));
+Env::info("cortical columns: " . $columnCount);
 
+// todo: move to class Cortex
 $neurons = [];
 $neuronMap = [];
 $inputMap = [];
 $outputMap = [];
 
-Env::info("neurons: " . ($columnCount * $neuronCount));
-Env::info("cortical columns: " . $columnCount);
+// Builds cortical columns
 echo "\n";
-
-// Creates Cortical Column (CC) in Cortical Space (CS)
-// - $cci - Index of cortical column
 for ($cci = 0; $cci < $columnCount; $cci++) {
-	// Calculates coordinate (x,y) of Cortical Column (CC) in Cortical Space (CS)
-	// - $ccx - X coordinate
-	// - $ccy - Y coordinate
 	$ccx = $columnSize * ($cci % $width);
 	$ccy = $columnSize * floor($cci / $width);
 
-	// Creates Neuron (N) in Cortical Column (CC)
+	// todo: move to method Cortext::build()
 	for ($ni = 0; $ni < $neuronCount; $ni++) {
-		// Generates ID of Neuron (N) in Cortical Space (CS)
-		$id = 'cc' . $cci . 'n' . $ni;
 
-		// Calculates coordinate (x,y) of Neuron (N) in Cortical Space (CS)
-		//
-		// center point of CC in CS
-		//   round($ccx + $columnSize * 0.5)
-		//   round($ccy + $columnSize * 0.5)
-		// random point of N in CC
-		//   rand($columnSize * -0.5, $columnSize * 0.5)
-		// 
+		$id = 'cc' . $cci . 'n' . $ni;
+		$ncr = 0.5;
 		$coord = [
-			round($ccx + $columnSize * 0.5) + rand($columnSize * -0.5, $columnSize * 0.5),
-			round($ccy + $columnSize * 0.5) + rand($columnSize * -0.5, $columnSize * 0.5),
+			round($ccx + $columnSize * 0.5 + rand($columnSize * -$ncr, $columnSize * $ncr)),
+			round($ccy + $columnSize * 0.5 + rand($columnSize * -$ncr, $columnSize * $ncr)),
 		];
 
-		// Installs Neuron (N) at random point in Cortical Space (CS)
 		$neuron = new Neuron($id, $coord);
 		$neuron->setCorticalColumnId($cci);
 		$neuron->configure([
@@ -75,31 +59,24 @@ for ($cci = 0; $cci < $columnCount; $cci++) {
 			'burstThreshold' => 120,
 		]);
 
-		// Dendrite (flat tree) (pre-synapse)
 		$neuron->createInputs([
 			'count' => 25,
 			'radius' => 50,
 			'weight' => 1,
 		]);
 
-		// Axon (flat tree) (post-synapse)
-		$neuron->createOutputs([
-			'count' => 15,
-			'radius' => 20,
-			//'offset' => 0,
-		]);
-
-		/*
-		
 		// Lateral break
+		/*
 		$neuron->createInputs([
 			'count' => 4,
 			'radius' => 4,
 			'weight' => -30,
 			'offset' => 200,
 		]);
+		*/
 
 		// Long axon
+		/*
 		if ($ni == 0) {
 			$neuron->createOutputs([
 				'count' => 10,
@@ -107,9 +84,13 @@ for ($cci = 0; $cci < $columnCount; $cci++) {
 				'offset' => 30,
 			]);
 		}
-
 		*/
 
+		$neuron->createOutputs([
+			'count' => 15,
+			'radius' => 20,
+			//'offset' => 0,
+		]);
 
 		// Add to the global list of neurons
 		$neurons[$id] = $neuron;
@@ -172,9 +153,8 @@ sleep(1);
  * Run cortex
  */
 
-$hopMaxCount = 3000;
-
 Env::stage('Run cortex');
+
 
 // Prepare initial inputs
 $cc1r = rand($columnCount * 0.1, $columnCount * 0.9);
